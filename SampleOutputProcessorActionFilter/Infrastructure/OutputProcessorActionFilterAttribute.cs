@@ -61,11 +61,9 @@ namespace SampleOutputProcessorActionFilter.Infrastructure
             /// <exception cref="Exception">A delegate callback throws an exception.</exception>
             public override void Close()
             {
-                using (var writer = new StreamWriter(_stream, _outputEncoding))
-                {
-                    writer.Write(_processor(_data.ToString()));
-                    writer.Flush();
-                }
+                var output = _outputEncoding.GetBytes(_processor(_data.ToString()));
+                _stream.Write(output, 0, output.Length);
+                _stream.Flush();
                 _data.Clear();
             }
 
